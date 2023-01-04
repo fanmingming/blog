@@ -1,6 +1,12 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
+#=================================================================#
+#   System Required: CentOS7 X86_64                               #
+#   Description: FFmpeg Stream Media Server                       #
+#   Author: LALA                                    #
+#   Website: https://www.lala.im                                  #
+#=================================================================#
 
 # 颜色选择
 red='\033[0;31m'
@@ -63,11 +69,13 @@ then
 	while true
 	do
 		cd $folder
-video=$(find ./ -type f | shuf -n 1)
-  ffmpeg -re -i "$video" -preset ultrafast -vcodec libx264 -g 60 -b:v 6000k -c:a aac -b:a 128k -strict -2 -f flv ${rtmp}
- done
+		for video in $(ls *.mp4)
+		do
+		ffmpeg -re -i "$video" -c:v copy -c:a aac -b:a 192k -strict -2 -f flv ${rtmp}
+		done
+	done
 fi
- }
+	}
 
 # 停止推流
 stream_stop(){
