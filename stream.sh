@@ -1,12 +1,6 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-#=================================================================#
-#   System Required: CentOS7 X86_64                               #
-#   Description: FFmpeg Stream Media Server                       #
-#   Author: LALA                                    #
-#   Website: https://www.lala.im                                  #
-#=================================================================#
 
 # 颜色选择
 red='\033[0;31m'
@@ -16,17 +10,15 @@ font="\033[0m"
 
 ffmpeg_install(){
 # 安装FFMPEG
-read -p "你的机器内是否已经安装过FFmpeg4.x?安装FFmpeg才能正常推流,是否现在安装FFmpeg?(yes/no):" Choose
+read -p "安装FFmpeg才能正常推流,是否现在安装FFmpeg?(yes/no):" Choose
 if [ $Choose = "yes" ];then
-	yum -y install wget
-	wget --no-check-certificate https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-4.0.3-64bit-static.tar.xz
-	tar -xJf ffmpeg-4.0.3-64bit-static.tar.xz
-	cd ffmpeg-4.0.3-64bit-static
-	mv ffmpeg /usr/bin && mv ffprobe /usr/bin && mv qt-faststart /usr/bin && mv ffmpeg-10bit /usr/bin
+	sudo apt update
+	sudo apt install ffmpeg
+	ffmpeg -version
 fi
 if [ $Choose = "no" ]
 then
-    echo -e "${yellow} 你选择不安装FFmpeg,请确定你的机器内已经自行安装过FFmpeg,否则程序无法正常工作! ${font}"
+    echo -e "${yellow} 你选择不安装FFmpeg! ${font}"
     sleep 2
 fi
 	}
@@ -45,10 +37,10 @@ if [[ $rtmp =~ "rtmp://" ]];then
 fi 
 
 # 定义视频存放目录
-read -p "输入你的视频存放目录 (格式仅支持mp4,并且要绝对路径,例如/opt/video):" folder
+read -p "输入视频存放目录 (格式支持mp4,并且要绝对路径,例如/opt/video):" folder
 
 # 判断是否需要添加水印
-read -p "是否需要为视频添加水印?水印位置默认在右上方,需要较好CPU支持(yes/no):" watermark
+read -p "是否需要为视频添加水印?水印位置默认在右上方(yes/no):" watermark
 if [ $watermark = "yes" ];then
 	read -p "输入你的水印图片存放绝对路径,例如/opt/image/watermark.jpg (格式支持jpg/png/bmp):" image
 	echo -e "${yellow} 添加水印完成,程序将开始推流. ${font}"
@@ -84,10 +76,10 @@ stream_stop(){
 	}
 
 # 开始菜单设置
-echo -e "${yellow} CentOS7 X86_64 FFmpeg无人值守循环推流 For LALA.IM ${font}"
+echo -e "${yellow} FFmpeg无人值守循环推流 ${font}"
 echo -e "${red} 请确定此脚本目前是在screen窗口内运行的! ${font}"
-echo -e "${green} 1.安装FFmpeg (机器要安装FFmpeg才能正常推流) ${font}"
-echo -e "${green} 2.开始无人值守循环推流 ${font}"
+echo -e "${green} 1.安装FFmpeg ${font}"
+echo -e "${green} 2.开始循环推流 ${font}"
 echo -e "${green} 3.停止推流 ${font}"
 start_menu(){
     read -p "请输入数字(1-3),选择你要进行的操作:" num
